@@ -22,16 +22,22 @@ class MyHomeParser:
         self.cards.extend(all_cards)
 
     def get_homes_url(self):
-        df = pd.read_csv('data/homes.csv')
-        old_urls = df['url']
+        try:
+            df = pd.read_csv('data/homes.csv')
+            old_urls = df['url']
+        except FileNotFoundError:
+            old_urls = []
         for card in self.cards:
             card_href = card.find('a').get('href')[:37]
             if card_href not in list(old_urls):
                 self.homes_url.append(card_href)
 
     def get_homes_id(self):
-        df = pd.read_csv('data/homes.csv')
-        old_ids = df['id']
+        try:
+            df = pd.read_csv('data/homes.csv')
+            old_ids = df['id']
+        except FileNotFoundError:
+            old_ids = []
         for card in self.cards:
             home_id = int(card.get('data-product-id'))
             if home_id not in list(old_ids):
@@ -40,7 +46,10 @@ class MyHomeParser:
     def save_to_csv(self):
         data_dict = {'url': self.homes_url, 'id': self.homes_id}
         df = pd.DataFrame(data_dict)
-        df.to_csv('data/homes.csv', index=False, mode='a', header=False)
+        if os.path.isfile('data/homes.csv'):
+            df.to_csv('data/homes.csv', index=False, mode='a', header=False)
+        else:
+            df.to_csv('data/homes.csv', index=False, mode='a')
 
     def __del__(self):
         self.request.close()

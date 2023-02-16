@@ -1,4 +1,3 @@
-# импорт типов и состояний из библиотеки aiogram
 import asyncio
 
 from aiogram import types, filters

@@ -1,15 +1,11 @@
 import asyncio
-import os
 import logging
 
 from aiogram import executor
-from aiogram.utils.executor import start_webhook
 
 from loader import dp, bot
 from utils import set_default_commands, check_new_houses
-import handlers
-from settings import (BOT_TOKEN, HEROKU_APP_NAME,
-                      WEBHOOK_URL, WEBHOOK_PATH,
+from settings import (WEBHOOK_URL, WEBHOOK_PATH,
                       WEBAPP_HOST, WEBAPP_PORT)
 
 

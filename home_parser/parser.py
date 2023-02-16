@@ -8,6 +8,7 @@ class MyHomeParser:
                               'Chrome/104.0.5112.124 YaBrowser/22.9.4.863 Yowser/2.5 Safari/537.36'}
 
     def __init__(self, url: str):
+        print("Parse-url---", url)
         self.request = requests.get(url=url, headers=self._headers)
         self.status = self.request.status_code
         self.soup = BeautifulSoup(self.request.text, 'lxml')
@@ -19,6 +20,7 @@ class MyHomeParser:
             'url': os.environ.get('HOMES_URL', '').split(','),
             'id': os.environ.get('HOMES_ID', '').split(',')
         })
+        print("homes_df---", homes_df)
         self.homes_df = homes_df.drop_duplicates()
 
     def get_cards(self):
@@ -48,6 +50,8 @@ class MyHomeParser:
         homes_df = homes_df.drop_duplicates()
         homes_url = ','.join(homes_df['url'].tolist())
         homes_id = ','.join([str(i) for i in homes_df['id'].tolist()])
+        print("homes_url----", homes_url)
+        print("homes_id----", homes_id)
         os.environ['HOMES_URL'] = homes_url
         os.environ['HOMES_ID'] = homes_id
 

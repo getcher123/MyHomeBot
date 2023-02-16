@@ -4,6 +4,7 @@ import os
 
 from aiogram import Bot, Dispatcher
 from aiogram.dispatcher.webhook import WebhookRequestHandler
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from settings import (WEBHOOK_URL, WEBHOOK_PATH,
                       WEBAPP_HOST, WEBAPP_PORT)

@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-
-import pandas as pd
-import os
+import sqlite3
 
 class MyHomeParser:
 
@@ -16,41 +14,37 @@ class MyHomeParser:
         self.cards = []
         self.homes_url = []
         self.homes_id = []
+        self.conn = sqlite3.connect('data.db')
 
     def get_cards(self):
         all_cards = self.soup.select('div[class="statement-card"]')
         self.cards.extend(all_cards)
 
     def get_homes_url(self):
-        try:
-            df = pd.read_csv('data/homes.csv')
-            old_urls = df['url']
-        except FileNotFoundError:
-            old_urls = []
+        cur = self.conn.cursor()
+        cur.execute('SELECT url FROM homes')
+        old_urls = cur.fetchall()
         for card in self.cards:
             card_href = card.find('a').get('href')[:37]
-            if card_href not in list(old_urls):
+            if card_href not in old_urls:
                 self.homes_url.append(card_href)
 
     def get_homes_id(self):
-        try:
-            df = pd.read_csv('data/homes.csv')
-            old_ids = df['id']
-        except FileNotFoundError:
-            old_ids = []
+        cur = self.conn.cursor()
+        cur.execute('SELECT id FROM homes')
+        old_ids = cur.fetchall()
         for card in self.cards:
             home_id = int(card.get('data-product-id'))
-            if home_id not in list(old_ids):
+            if home_id not in old_ids:
                 self.homes_id.append(home_id)
 
-    def save_to_csv(self):
-        data_dict = {'url': self.homes_url, 'id': self.homes_id}
-        df = pd.DataFrame(data_dict)
-        if os.path.isfile('data/homes.csv'):
-            df.to_csv('data/homes.csv', index=False, mode='a', header=False)
-        else:
-            df.to_csv('data/homes.csv', index=False, mode='a')
+    def save_to_db(self):
+        cur = self.conn.cursor()
+        for url, home_id in zip(self.homes_url, self.homes_id):
+            cur.execute('INSERT INTO homes (url, id) VALUES (?, ?)', (url, home_id))
+        self.conn.commit()
 
     def __del__(self):
         self.request.close()
+        self.conn.close()
         del self

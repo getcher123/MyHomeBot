@@ -4,12 +4,14 @@ from loader import bot
 from messages import MESSAGES
 from home_parser import MyHomeParser
 
+import os
 
 async def check_new_houses(sleep_time: int):
     while True:
         await asyncio.sleep(sleep_time)
-        with open('data/url.txt', 'r') as f:
-            url = f.read()
+        url = os.environ.get('URL')
+        if not url:
+            continue
         p = MyHomeParser(url)
         if p.status == 200:
             print(f'status code: {p.status}')
@@ -24,11 +26,9 @@ async def check_new_houses(sleep_time: int):
         else:
             continue
         urls_str = '\n'.join(p.homes_url)
-        msg = f"{MESSAGES['house_is_found']}\n\n{urls_str}"
-        with open('data/users_id.txt', 'r') as f:
-            users = f.readlines()
-        for user in users:
+        user_ids = os.environ.get('USER_IDS', '').split(',')
+        for user_id in user_ids:
             try:
-                await bot.send_message(user, msg)
+                await bot.send_message(user_id, msg)
             except Exception as e:
                 print(e)

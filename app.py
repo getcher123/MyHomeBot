@@ -17,12 +17,4 @@ async def on_startup(dispatcher):
 
 if __name__ == '__main__':
 
-# Create data directory if it does not exist
-    if not os.path.exists('data'):
-        os.makedirs('data')
-        with open('data/url.txt', 'w+', encoding='utf-8') as file:
-            pass
-        with open('data/users_id.txt', 'w+', encoding='utf-8') as file:
-            pass
-    
     executor.start_polling(dp, on_startup=on_startup)

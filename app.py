@@ -2,7 +2,6 @@ import asyncio
 import os
 import logging
 
-
 from aiogram import executor
 from aiogram.utils.executor import start_webhook
 
@@ -10,25 +9,34 @@ from loader import dp, bot
 from utils import set_default_commands, check_new_houses
 import handlers
 from settings import (BOT_TOKEN, HEROKU_APP_NAME,
-                          WEBHOOK_URL, WEBHOOK_PATH,
-                          WEBAPP_HOST, WEBAPP_PORT)
+                      WEBHOOK_URL, WEBHOOK_PATH,
+                      WEBAPP_HOST, WEBAPP_PORT)
 
 
-async def on_startup(dispatcher):
-    # Устанавливаем дефолтные команды
-    await set_default_commands(dispatcher)
+async def on_startup(dp):
+    logging.info("Starting up...")
+    await set_default_commands(dp)
     loop = asyncio.get_event_loop()
     loop.create_task(check_new_houses(60))
     await bot.set_webhook(WEBHOOK_URL,drop_pending_updates=True)
-    
-async def on_shutdown(dispatcher):
-    logging.warning('Bye! Shutting down webhook connection')
+
+
+async def on_shutdown(dp):
+    logging.warning('Shutting down...')
+    await bot.delete_webhook()
+    await dp.storage.close()
+    await dp.storage.wait_closed()
 
 
 if __name__ == '__main__':
-
     logging.basicConfig(level=logging.INFO)
 
-    executor.start_polling(dp, on_startup=on_startup)
-
-
+    executor.start_webhook(
+        dispatcher=dp,
+        webhook_path=WEBHOOK_PATH,
+        on_startup=on_startup,
+        on_shutdown=on_shutdown,
+        skip_updates=True,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT,
+    )

@@ -29,7 +29,7 @@ async def start_message(message: types.Message):
     if(not os.environ.get('USER_IDS')):
         user_ids = []
     else:
-    user_ids = os.environ.get('USER_IDS').split(',')
+        user_ids = os.environ.get('USER_IDS').split(',')
     if str(message.chat.id) not in user_ids:
         user_ids.append(str(message.chat.id))
         os.environ['USER_IDS'] = ','.join(user_ids)

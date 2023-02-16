@@ -22,7 +22,7 @@ async def check_new_houses(sleep_time: int):
         p.get_homes_id()
         p.get_homes_url()
         if p.homes_url and p.homes_id:
-            p.save_to_csv()
+            p.save_to_env()
         else:
             continue
         urls_str = '\n'.join(p.homes_url)

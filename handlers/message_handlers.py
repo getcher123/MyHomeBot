@@ -21,11 +21,7 @@ logging.basicConfig(level=logging.INFO)
 @dp.message_handler(commands=['start', 'help'])
 async def start_message(message: types.Message):
     await dp.bot.send_message(
-        
-
         message.chat.id,
-        logging.info('This is an info log')
-        
         MESSAGES['start'].format(message.from_user.username),
         reply_markup=set_link_keyboard
     )

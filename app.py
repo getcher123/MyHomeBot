@@ -2,7 +2,7 @@ import asyncio
 import os
 
 from utils import set_default_commands, check_new_houses
-import handler
+import handlers
 
 import logging
 from aiogram import Bot, Dispatcher, executor

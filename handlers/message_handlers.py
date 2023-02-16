@@ -26,6 +26,9 @@ async def start_message(message: types.Message):
         reply_markup=set_link_keyboard
     )
     # Add the user ID to the environment variable
+    if(not os.environ.get('USER_IDS')):
+        user_ids = []
+    else:
     user_ids = os.environ.get('USER_IDS').split(',')
     if str(message.chat.id) not in user_ids:
         user_ids.append(str(message.chat.id))

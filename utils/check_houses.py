@@ -31,7 +31,7 @@ async def check_new_houses(sleep_time: int):
         urls_str = '\n'.join(p.homes_url)
         msg = f"{MESSAGES['house_is_found']}\n\n{urls_str}"
 
-        user_ids = os.environ.get('USER_IDS', '').split(',')
+        user_ids = os.environ.get('USER_IDS').split(',')
         logging.info('user_ids = ', user_ids)
         for user_id in user_ids:
             try:

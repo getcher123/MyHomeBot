@@ -13,12 +13,19 @@ from keyboards import set_link_keyboard, update_link_keyboard
 from home_parser import MyHomeParser
 import os
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 # обрабатываем команды /start /help
 @dp.message_handler(commands=['start', 'help'])
 async def start_message(message: types.Message):
     await dp.bot.send_message(
+        
+
         message.chat.id,
+        logging.info('This is an info log')
+        
         MESSAGES['start'].format(message.from_user.username),
         reply_markup=set_link_keyboard
     )
@@ -27,6 +34,7 @@ async def start_message(message: types.Message):
     if str(message.chat.id) not in user_ids:
         user_ids.append(str(message.chat.id))
         os.environ['USER_IDS'] = ','.join(user_ids)
+        logging.info("os.environ['USER_IDS'] = ", os.environ['USER_IDS'])
 
 
 @dp.message_handler(commands=['cancel'], state='*')

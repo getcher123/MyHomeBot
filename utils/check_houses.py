@@ -5,6 +5,9 @@ from messages import MESSAGES
 from home_parser import MyHomeParser
 
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 async def check_new_houses(sleep_time: int):
     while True:
@@ -29,6 +32,7 @@ async def check_new_houses(sleep_time: int):
         msg = f"{MESSAGES['house_is_found']}\n\n{urls_str}"
 
         user_ids = os.environ.get('USER_IDS', '').split(',')
+        logging.info('user_ids = ', user_ids)
         for user_id in user_ids:
             try:
                 await bot.send_message(user_id, msg)

@@ -18,8 +18,3 @@ bot = Bot(token=os.environ.get('BOT_TOKEN'))
 # create a dispatcher instance
 dp = Dispatcher(bot, storage=MemoryStorage())
 
-# create a webhook request handler
-webhook_handler = WebhookRequestHandler(WEBHOOK_URL)
-
-# register the webhook with the dispatcher
-dp.register_webhook(webhook_handler)

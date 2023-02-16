@@ -26,7 +26,7 @@ async def on_startup(dispatcher):
     # Устанавливаем дефолтные команды
     await set_default_commands(dispatcher)
     loop = asyncio.get_event_loop()
-    loop.create_task(check_new_houses(60))
+    loop.create_task(check_new_houses(dp, 60))
 
 
 if __name__ == '__main__':

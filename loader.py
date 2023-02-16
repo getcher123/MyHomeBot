@@ -5,6 +5,9 @@ import os
 from aiogram import Bot, Dispatcher
 from aiogram.dispatcher.webhook import WebhookRequestHandler
 
+from settings import (WEBHOOK_URL, WEBHOOK_PATH,
+                      WEBAPP_HOST, WEBAPP_PORT)
+
 # set up logging
 logging.basicConfig(level=logging.INFO)
 
@@ -15,7 +18,7 @@ bot = Bot(token=os.environ.get('BOT_TOKEN'))
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 # create a webhook request handler
-webhook_handler = WebhookRequestHandler(os.environ.get('WEBHOOK_URL'))
+webhook_handler = WebhookRequestHandler(WEBHOOK_URL)
 
 # register the webhook with the dispatcher
 dp.register_webhook(webhook_handler)
